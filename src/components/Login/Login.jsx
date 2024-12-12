@@ -1,27 +1,30 @@
 import React, { useState } from "react";
+import axios from "axios";  
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find(
-      (u) =>
-        u.email === credentials.email &&
-        u.password === credentials.password &&
-        u.status === "accepted"
-    );
-
-    if (user) {
-      alert("Login successful!");
-    } else {
-      alert("Login failed! Ensure your account is approved or credentials are correct.");
+    try {
+      const response = await axios.post("http://localhost:8000/api/auth/login", credentials, {
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "WORLDBACKENDSERVER"
+        },
+      });
+      setMessage("Login successful!");
+      console.log(response);
+      setCredentials({ email: "", password: "" });
+    } catch (error) {
+      console.log(error);
+      setMessage("Login failed! Please check your credentials.");
     }
   };
 
@@ -29,11 +32,16 @@ const Login = () => {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="w-full max-w-sm bg-white rounded-lg shadow-md p-6">
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
+        {message && (
+          <p
+            className={`text-center mb-4 ${message.includes("successful") ? "text-green-500" : "text-red-500"}`}
+          >
+            {message}
+          </p>
+        )}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Email
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
             <input
               type="email"
               name="email"
@@ -45,9 +53,7 @@ const Login = () => {
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Password
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Password</label>
             <input
               type="password"
               name="password"

@@ -24,8 +24,13 @@ const UserForm = () => {
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/register", formData); 
+      const response = await axios.post("http://localhost:8000/api/auth/register", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }); 
       setMessage("User created successfully!");
+      console.log(response);
       setFormData({ username: "", email: "", password: "", status: "active" });
     } catch (error) {
       setMessage("Error creating user. Please try again.");
