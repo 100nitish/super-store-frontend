@@ -1,5 +1,5 @@
 import React from "react";
-import SimpleForm from "./SimpleForm";
+import SimpleForm from "./AddProduct";
 
 const ProductForm = ({ data, setData, updateDataApi, setUpdateDataApi }) => {
   return (

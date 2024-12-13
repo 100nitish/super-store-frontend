@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getPost, deletePost } from "../API/PostApi";
-import SimpleForm from "./SimpleForm";
+import SimpleForm from "./AddProduct";
 import Sidebar from "./Sidebar";
 import AdminHeader from "./AdminHeader";
 

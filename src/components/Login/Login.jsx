@@ -16,12 +16,21 @@ const Login = () => {
       const response = await axios.post("http://localhost:8000/api/auth/login", credentials, {
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "WORLDBACKENDSERVER"
         },
       });
+      if(response.ok){
+
+        setCredentials({ email: "", password: "" });
+        localStorage.setItem("token",response)
+
+      }
+      else{
+        alert('')
+        console.log("Invalid Credential")
+      }
       setMessage("Login successful!");
       console.log(response);
-      setCredentials({ email: "", password: "" });
+      
     } catch (error) {
       console.log(error);
       setMessage("Login failed! Please check your credentials.");

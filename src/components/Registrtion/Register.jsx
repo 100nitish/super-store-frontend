@@ -31,6 +31,7 @@ const UserForm = () => {
       }); 
       setMessage("User created successfully!");
       console.log(response);
+      localStorage.setItem("token",response)
       setFormData({ username: "", email: "", password: "", status: "active" });
     } catch (error) {
       setMessage("Error creating user. Please try again.");
