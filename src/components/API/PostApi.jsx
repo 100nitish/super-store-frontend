@@ -3,7 +3,7 @@ import axios from "axios"
 
 const api = axios.create({
 
-    baseURL: "https://fakestoreapi.com/products"
+    baseURL: "http://localhost:8000/api/form/get-product"
 })
 
 

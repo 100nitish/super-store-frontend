@@ -3,11 +3,12 @@ import axios from "axios";
 
 const AddProductForm = () => {
   const [formData, setFormData] = useState({
-    image: null,
-    title: "",
+    
+    name: "",
     description: "",
     price: "",
-    rating: "",
+    category: "",
+    image: null,
   });
   const [message, setMessage] = useState("");
 
@@ -25,24 +26,38 @@ const AddProductForm = () => {
   
     try {
       const data = new FormData();
-      data.append("image", formData.image);
-      data.append("title", formData.title);
+  
+      data.append("name", formData.name);
       data.append("description", formData.description);
       data.append("price", formData.price);
-      data.append("rating", formData.rating);
+      data.append("category", formData.category);
+      data.append("image", formData.image);
   
+     
       const response = await axios.post(
         "http://localhost:8000/api/form/add-product",
-        data
+        data,{
+          headers:{
+            'Content-Type':'multipart/form-data'
+          }
+        }
       );
   
+     
       setMessage("Product added successfully!");
-      setFormData({ image: null, title: "", description: "", price: "", rating: "" });
+      setFormData({
+        name: "",
+        description: "",
+        price: "",
+        category: "",
+        image: null,
+      });
     } catch (error) {
       setMessage("Error adding product. Please try again.");
       console.error("Error:", error.response?.data || error.message);
     }
   };
+  
   
 
   return (
@@ -53,39 +68,23 @@ const AddProductForm = () => {
       >
         <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">Add Product</h2>
 
-        <div className="mb-4">
-          <label
-            htmlFor="image"
-            className="block text-gray-700 font-medium mb-2"
-          >
-            Upload Image
-          </label>
-          <input
-            type="file"
-            id="image"
-            name="image"
-            onChange={handleChange}
-            accept="image/*"
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-300"
-            required
-          />
-        </div>
+       
 
         <div className="mb-4">
           <label
-            htmlFor="title"
+            htmlFor="name"
             className="block text-gray-700 font-medium mb-2"
           >
-            Title
+            Name
           </label>
           <input
             type="text"
-            id="title"
-            name="title"
-            value={formData.title}
+            id="name"
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-300"
-            placeholder="Enter the title"
+            placeholder="Enter the Product Name"
             required
           />
         </div>
@@ -130,21 +129,39 @@ const AddProductForm = () => {
 
         <div className="mb-4">
           <label
-            htmlFor="rating"
+            htmlFor="category"
             className="block text-gray-700 font-medium mb-2"
           >
-            Rating
+            Category
           </label>
           <input
-            type="number"
-            id="rating"
-            name="rating"
-            value={formData.rating}
+            type="text"
+            id="category"
+            name="category"
+            value={formData.category}
             onChange={handleChange}
             className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-300"
-            placeholder="Enter the rating (1-5)"
+            placeholder="Enter the category"
             min="1"
             max="5"
+            required
+          />
+        </div>
+
+        <div className="mb-4">
+          <label
+            htmlFor="image"
+            className="block text-gray-700 font-medium mb-2"
+          >
+            Upload Image
+          </label>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            onChange={handleChange}
+            accept="image/*"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-300"
             required
           />
         </div>
