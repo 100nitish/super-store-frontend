@@ -14,14 +14,14 @@ const BasicModal = ({ handleOpen, handleClose, open, item, isEditMode }) => {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
-    // Populate form fields when editing an existing product
+ 
     if (isEditMode && item) {
       setFormData({
         name: item.name || "",
         description: item.description || "",
         price: item.price || "",
         category: item.category || "",
-        image: null, // Image won't be prefilled
+        image: null, 
       });
     }
   }, [item, isEditMode]);
@@ -94,7 +94,7 @@ const BasicModal = ({ handleOpen, handleClose, open, item, isEditMode }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <div className="min-h-96 pt-3 pb-3 flex items-center justify-center bg-gray-100">
+        <div className="h-96 pt-3 pb-3 flex items-center mt-24 mx-auto justify-center w-96 bg-gray-100">
           <form
             onSubmit={handleSubmit}
             className="w-full max-w-lg bg-white p-8 shadow-md rounded-lg"
