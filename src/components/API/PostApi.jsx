@@ -2,9 +2,9 @@ import axios from "axios"
 
 
 const api = axios.create({
+    baseURL: `http://localhost:8000/api/form/get-product`
+});
 
-    baseURL: "http://localhost:8000/api/form/get-product"
-})
 
 
 export const getPost= () =>{

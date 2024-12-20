@@ -35,6 +35,7 @@ const BasicModal = ({ handleOpen, handleClose, open, item, isEditMode }) => {
   };
 
   const handleSubmit = async () => {
+    // e.preventDefault();
     
     setMessage("");
 
@@ -94,7 +95,7 @@ const BasicModal = ({ handleOpen, handleClose, open, item, isEditMode }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <div className="h-96 pt-3 pb-3 flex items-center mt-24 mx-auto justify-center w-96 bg-gray-100">
+        <div className="h-96 pt-3 pb-3 flex items-center mt-24 mx-auto my-auto justify-center w-96 bg-gray-100">
           <form
             onSubmit={handleSubmit}
             className="w-full max-w-lg bg-white p-8 shadow-md rounded-lg"

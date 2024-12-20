@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar";
 import AdminHeader from "./AdminHeader";
+import axios from "axios";
 
 
 const MainDashboard = () => {
   const [user, setUser] = useState([]);
-
-
 
   useEffect(() => {
     const storedUser = localStorage.getItem("users");
