@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { getPost, deletePost } from "../API/PostApi";
+import { deleteProduct, getPost,} from "../API/PostApi";
 import Sidebar from "./Sidebar";
 import AdminHeader from "./AdminHeader";
 import Button from "@mui/material/Button";
 import Edit from "./Edit";
-import axios from "axios";
+
 import { Link } from "react-router-dom"
 
 const Products = () => {
@@ -45,14 +45,8 @@ const Products = () => {
 
     if (shouldRemove) {
       console.log("test:",id)
-      const res = await axios.delete(
-        `http://localhost:8000/api/form/delete-product/${id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      ).then((res)=>{
+      const res = await deleteProduct(id)
+      .then((res)=>{
         getPostData();
 
       }).catch((err)=>{

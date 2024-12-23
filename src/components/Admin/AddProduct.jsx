@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { addProduct } from "../API/PostApi";
 
 const AddProductForm = () => {
   const [formData, setFormData] = useState({
@@ -34,14 +35,7 @@ const AddProductForm = () => {
       data.append("image", formData.image);
   
      
-      const response = await axios.post(
-        "http://localhost:8000/api/form/add-product",
-        data,{
-          headers:{
-            'Content-Type':'multipart/form-data'
-          }
-        }
-      );
+      const response = await addProduct(data);
   
      
       setMessage("Product added successfully!");
@@ -128,25 +122,31 @@ const AddProductForm = () => {
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="category"
-            className="block text-gray-700 font-medium mb-2"
-          >
-            Category
-          </label>
-          <input
-            type="text"
-            id="category"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-300"
-            placeholder="Enter the category"
-            min="1"
-            max="5"
-            required
-          />
-        </div>
+  <label
+    htmlFor="category"
+    className="block text-gray-700 font-medium mb-2"
+  >
+    Category
+  </label>
+  <select
+    id="category"
+    name="category"
+    value={formData.category}
+    onChange={handleChange}
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-300"
+    required
+  >
+    <option value="" disabled>
+      Select a category
+    </option>
+    <option value="1">Grocerry</option>
+    <option value="2">Electronic</option>
+    <option value="3">Cloths</option>
+    <option value="4">Jewelary</option>
+    <option value="5">Kids</option>
+  </select>
+</div>
+
 
         <div className="mb-4">
           <label

@@ -15,15 +15,25 @@ export const postLogin = (formData) => {
     });
   };
   
-
+export const addProduct = (formData)=>{
+  return api.post(`/form/add-product`,formData,{
+    headers:{
+      'Content-Type':'multipart/form-data'
+    }})
+}
 
 export const getPost = () => {
   return api.get(`/form/get-product`);
 };
 
 
-export const deletePost = (id) => {
-  return api.delete(`/form/get-product/${id}`);
+export const deleteProduct = (id) => {
+  return api.delete(`/form/delete-product/${id}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 };
 
 
@@ -35,3 +45,7 @@ export const postData = (post) => {
 export const putData = (id, post) => {
   return api.put(`/form/get-product/${id}`, post);
 };
+
+export const userData = ()=>{
+  return api.get(`/admin/users`)
+}

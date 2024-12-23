@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "@mui/material/Modal";
 import Products from "./Products";
+import { addProduct } from "../API/PostApi";
 
 const BasicModal = ({ handleOpen, handleClose, open, item, isEditMode }) => {
   const [formData, setFormData] = useState({
@@ -60,11 +61,7 @@ const BasicModal = ({ handleOpen, handleClose, open, item, isEditMode }) => {
         setMessage("Product updated successfully!");
       } else {
         
-        await axios.post("http://localhost:8000/api/form/add-product", data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        await addProduct(data);
         setMessage("Product added successfully!");
       }
 
