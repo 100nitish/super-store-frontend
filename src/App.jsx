@@ -7,6 +7,7 @@ import Products from './components/Admin/Products';
 import ProductForm from './components/Admin/ProductForm';
 import Register from './components/Registrtion/Register'
 import Edit from './components/Admin/Edit'
+import SingleProduct from './components/Admin/SingleProduct';
 
 const App = () => {
   const [open, setOpen] = useState(false);
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/register" element={<Register/>} />
           <Route path="/login" element={<Login />} />
           <Route path="/products" element={<Products/>} />
+          <Route path="/products/:id" element={<SingleProduct/>} />
           <Route
           path="/edit"
           element={<Edit open={open} setOpen={setOpen} />}

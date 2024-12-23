@@ -7,13 +7,18 @@ const SingleProduct = () => {
 
     const {id} = useParams();
     const[product,setProduct]=useState({});
-    useEffect(()=>{
-       const getProduct=async ()=>{
-        const response=await axios.get(`http://localhost:8000/api/form/get-product/${_id}`)
-        setProduct(response.data)
-       }
-       getProduct()
-    },[id])
+    useEffect(() => {
+      const getProduct = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8000/api/form/get-product/${id}`);
+          setProduct(response.data);
+        } catch (error) {
+          console.error("Error fetching product:", error);
+        }
+      };
+      getProduct();
+    }, [id]);
+    
   return (
   <>
 <div className='m-20'>

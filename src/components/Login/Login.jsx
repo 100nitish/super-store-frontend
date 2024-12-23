@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import axios from "axios";  
+import { postLogin } from "../API/PostApi";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -13,27 +15,34 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/login", credentials, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      if(response.ok){
+      console.log("Sending credentials:", credentials); 
 
-        setCredentials({ email: "", password: "" });
-        localStorage.setItem("token",response)
+      const response = await postLogin(credentials)
 
-      }
-      else{
-        alert('')
-        console.log("Invalid Credential")
-      }
-      setMessage("Login successful!");
-      console.log(response);
+      console.log("Login Response:", response.data); 
+
       
+      const { token, userType } = response.data;
+
+      if (token && userType) {
+        
+        localStorage.setItem("token", token);
+
+        
+        if (userType === "Admin") {
+          navigate("/products");
+        } else if (userType === "user") {
+          navigate("/user");
+        } else {
+          setMessage("Invalid user type! Contact support.");
+        }
+      } else {
+        setMessage("Unexpected response! Please try again.");
+      }
     } catch (error) {
-      console.log(error);
-      setMessage("Login failed! Please check your credentials.");
+      console.error("Error Response:", error.response || error);
+      const errorMsg = error.response?.data?.msg || "Login failed! Please check your credentials.";
+      setMessage(errorMsg);
     }
   };
 
@@ -43,7 +52,9 @@ const Login = () => {
         <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
         {message && (
           <p
-            className={`text-center mb-4 ${message.includes("successful") ? "text-green-500" : "text-red-500"}`}
+            className={`text-center mb-4 ${
+              message.includes("successful") ? "text-green-500" : "text-red-500"
+            }`}
           >
             {message}
           </p>

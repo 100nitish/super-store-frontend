@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { postRegister } from "../API/PostApi";
 
 const UserForm = () => {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
     password: "",
-    status: "active", 
+    status: "active",
+    userType: "User", 
+    secretKey: "",
   });
 
   const [message, setMessage] = useState("");
@@ -21,21 +24,44 @@ const UserForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.userType === "Admin" && formData.secretKey !== "NitishS") {
+      setMessage("Invalid secret key for Admin! Please try again.");
+      return;
+    }
+
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:8000/api/auth/register", formData, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }); 
+      const response = await postRegister(formData, {
+        headers: { "Content-Type": "application/json" },
+      });
+
+      // const response = await axios.post("http://localhost:8000/api/auth/register", formData, {
+      //   headers: { "Content-Type": "application/json" },
+      // });
+
       setMessage("User created successfully!");
-      console.log(response);
-      localStorage.setItem("token",response)
-      setFormData({ username: "", email: "", password: "", status: "active" });
+      console.log("Response:", response.data);
+
+      
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+      }
+
+      
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        status: "active",
+        userType: "User",
+        secretKey: "",
+      });
     } catch (error) {
-      setMessage("Error creating user. Please try again.");
-      console.error(error);
+      const errorMsg = error.response?.data?.message || "Error creating user. Please try again.";
+      setMessage(errorMsg);
+      console.error("Error Response:", error.response || error);
     }
   };
 
@@ -54,6 +80,53 @@ const UserForm = () => {
         )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Register As
+            </label>
+            <div className="flex items-center space-x-4">
+              <label>
+                <input
+                  type="radio"
+                  name="userType"
+                  value="User"
+                  checked={formData.userType === "User"}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                User
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="userType"
+                  value="Admin"
+                  checked={formData.userType === "Admin"}
+                  onChange={handleChange}
+                  className="mr-2"
+                />
+                Admin
+              </label>
+            </div>
+          </div>
+
+          {formData.userType === "Admin" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Secret Key
+              </label>
+              <input
+                type="text"
+                name="secretKey"
+                placeholder="Enter Secret Key"
+                value={formData.secretKey}
+                onChange={handleChange}
+                required
+                className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              />
+            </div>
+          )}
+
+          <div>
             <label className="block text-sm font-medium text-gray-700">
               Username
             </label>
@@ -67,6 +140,7 @@ const UserForm = () => {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Email
@@ -81,6 +155,7 @@ const UserForm = () => {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Password
@@ -95,6 +170,7 @@ const UserForm = () => {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Status
@@ -110,6 +186,7 @@ const UserForm = () => {
               <option value="suspended">Suspended</option>
             </select>
           </div>
+
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"
