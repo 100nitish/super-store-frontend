@@ -1,7 +1,9 @@
 import axios from "axios";
+const token = localStorage.getItem("token");
 
 const api = axios.create({
   baseURL: `http://localhost:8000/api`, 
+ 
 });
 
 
@@ -47,5 +49,9 @@ export const putData = (id, post) => {
 };
 
 export const userData = ()=>{
-  return api.get(`/admin/users`)
+  return api.get(`/auth/get-register`, {
+    headers: {
+      Authorization: `Bearer ${token}`, 
+    },
+  })
 }

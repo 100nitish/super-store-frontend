@@ -28,6 +28,7 @@ const Products = () => {
   const getPostData = async () => {
     try {
       const res = await getPost();
+      
       console.log("Fetched posts data:", res.data); 
       setData(res.data);
     } catch (error) {
