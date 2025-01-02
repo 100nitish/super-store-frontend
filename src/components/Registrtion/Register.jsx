@@ -170,7 +170,9 @@ const UserForm = () => {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
+    
 
+          {formData.userType === "User" && (
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Status
@@ -181,11 +183,11 @@ const UserForm = () => {
               onChange={handleChange}
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             >
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="suspended">Suspended</option>
+              <option value="accepted">Accepted</option>
+              <option value="rejected">Rejected</option>
+              
             </select>
-          </div>
+          </div>)}
 
           <button
             type="submit"
