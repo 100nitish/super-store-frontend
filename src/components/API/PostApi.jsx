@@ -48,10 +48,25 @@ export const putData = (id, post) => {
   return api.put(`/form/get-product/${id}`, post);
 };
 
-export const userData = ()=>{
-  return api.get(`/auth/get-register`, {
+export const userData = async () => {
+  try {
+    const response = await api.get('/auth/get-register', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error;
+  }
+};
+
+
+export const deleteUser = async (userId) => {
+  return await api.delete(`/auth/delete-register/${userId}`, {
     headers: {
-      Authorization: `Bearer ${token}`, 
+      Authorization: `Bearer ${token}`,
     },
-  })
-}
+  });
+};

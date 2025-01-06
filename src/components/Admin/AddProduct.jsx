@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { addProduct } from "../API/PostApi";
+import { addNewProduct } from "../utils/addProductControl";
 
 const AddProductForm = () => {
   const [formData, setFormData] = useState({
-    
     name: "",
     description: "",
     price: "",
@@ -12,6 +10,7 @@ const AddProductForm = () => {
     image: null,
   });
   const [message, setMessage] = useState("");
+
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
@@ -21,38 +20,23 @@ const AddProductForm = () => {
     }));
   };
 
+
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      description: "",
+      price: "",
+      category: "",
+      image: null,
+    });
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setMessage("");
-  
-    try {
-      const data = new FormData();
-  
-      data.append("name", formData.name);
-      data.append("description", formData.description);
-      data.append("price", formData.price);
-      data.append("category", formData.category);
-      data.append("image", formData.image);
-  
-     
-      const response = await addProduct(data);
-  
-     
-      setMessage("Product added successfully!");
-      setFormData({
-        name: "",
-        description: "",
-        price: "",
-        category: "",
-        image: null,
-      });
-    } catch (error) {
-      setMessage("Error adding product. Please try again.");
-      console.error("Error:", error.response?.data || error.message);
-    }
+    await addNewProduct(formData, resetForm, setMessage);
   };
-  
-  
 
   return (
     <div className="min-h-96 pt-3 pb-3 flex items-center justify-center bg-gray-100">
@@ -60,15 +44,12 @@ const AddProductForm = () => {
         onSubmit={handleSubmit}
         className="w-full max-w-lg bg-white p-8 shadow-md rounded-lg"
       >
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">Add Product</h2>
-
-       
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
+          Add Product
+        </h2>
 
         <div className="mb-4">
-          <label
-            htmlFor="name"
-            className="block text-gray-700 font-medium mb-2"
-          >
+          <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
             Name
           </label>
           <input
@@ -103,10 +84,7 @@ const AddProductForm = () => {
         </div>
 
         <div className="mb-4">
-          <label
-            htmlFor="price"
-            className="block text-gray-700 font-medium mb-2"
-          >
+          <label htmlFor="price" className="block text-gray-700 font-medium mb-2">
             Price
           </label>
           <input
@@ -122,31 +100,30 @@ const AddProductForm = () => {
         </div>
 
         <div className="mb-4">
-  <label
-    htmlFor="category"
-    className="block text-gray-700 font-medium mb-2"
-  >
-    Category
-  </label>
-  <select
-    id="category"
-    name="category"
-    value={formData.category}
-    onChange={handleChange}
-    className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-300"
-    required
-  >
-    <option value="" disabled>
-      Select a category
-    </option>
-    <option value="1">Grocerry</option>
-    <option value="2">Electronic</option>
-    <option value="3">Cloths</option>
-    <option value="4">Jewelary</option>
-    <option value="5">Kids</option>
-  </select>
-</div>
-
+          <label
+            htmlFor="category"
+            className="block text-gray-700 font-medium mb-2"
+          >
+            Category
+          </label>
+          <select
+            id="category"
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring focus:ring-blue-300"
+            required
+          >
+            <option value="" disabled>
+              Select a category
+            </option>
+            <option value="1">Grocery</option>
+            <option value="2">Electronic</option>
+            <option value="3">Clothes</option>
+            <option value="4">Jewelry</option>
+            <option value="5">Kids</option>
+          </select>
+        </div>
 
         <div className="mb-4">
           <label

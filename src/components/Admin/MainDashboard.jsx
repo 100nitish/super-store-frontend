@@ -1,56 +1,16 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { fetchUsers, handleUserDelete } from "../utils/userControl";
+import { userData } from "../API/PostApi";
 import Sidebar from "./Sidebar";
 import AdminHeader from "./AdminHeader";
-import { userData } from "../API/PostApi"; 
 
 const MainDashboard = () => {
   const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
-
-  const fetchUserData = async () => {
-    try {
-        const response = await userData();
-        setUser(response.data.users || []); 
-        console.log(response.data.users)
-    } catch (error) {
-        console.error("Error fetching user data:", error);
-    } finally {
-        setLoading(false);
-    }
-};
-
-const handleDelete = async (index) => {
-  const confirmDelete = window.confirm("Are you sure you want to delete this user?");
-  if (!confirmDelete) {
-    return; 
-  }
-
-  try {
-    const userId = user[index]._id;
-
-    
-    await axios.delete(`http://localhost:8000/api/auth/delete-register/${userId}`);
-
-    
-    setUser(user.filter((_, i) => i !== index));
-
-    alert("User deleted successfully!");
-  } catch (error) {
-    console.error("Error deleting user:", error);
-    alert("Failed to delete the user. Please try again.");
-  }
-};
-
-
-
   useEffect(() => {
-    fetchUserData();
+    fetchUsers(userData, setUser, setLoading);
   }, []);
-
-
 
   return (
     <div className="flex min-h-screen">
@@ -71,12 +31,10 @@ const handleDelete = async (index) => {
                     <th className="px-4 py-2 text-left text-sm font-medium">#</th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Name</th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Email</th>
-                   
                     <th className="px-4 py-2 text-left text-sm font-medium">Status</th>
                     <th className="px-4 py-2 text-left text-sm font-medium">Action</th>
                   </tr>
                 </thead>
-
                 <tbody className="text-gray-700">
                   {user.length > 0 ? (
                     user.map((data, index) => (
@@ -102,7 +60,7 @@ const handleDelete = async (index) => {
                         <td className="px-4 py-3">
                           <button
                             className="ml-4 text-red-600 hover:text-red-800"
-                            onClick={() => handleDelete(index)}
+                            onClick={() => handleUserDelete(index, user, setUser)}
                           >
                             Delete
                           </button>
