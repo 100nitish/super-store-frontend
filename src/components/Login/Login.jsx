@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { postLogin } from "../API/PostApi";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/AuthContext";
 
 const Login = () => {
-  const [credentials, setCredentials] = useState({ email: "", password: "" });
+  const { storetokenInLS,credentials,setCredentials } = useContext(AuthContext); 
+  // const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [message, setMessage] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -15,20 +17,18 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      console.log("Sending credentials:", credentials); 
+      console.log("Sending credentials:", credentials);
 
-      const response = await postLogin(credentials)
+      const response = await postLogin(credentials);
 
-      console.log("Login Response:", response.data); 
+      console.log("Login Response:", response.data);
 
-      
       const { token, userType } = response.data;
 
       if (token && userType) {
-        
-        localStorage.setItem("token", token);
 
-        
+        storetokenInLS(token);
+
         if (userType === "Admin") {
           navigate("/products");
         } else if (userType === "user") {
@@ -41,7 +41,8 @@ const Login = () => {
       }
     } catch (error) {
       console.error("Error Response:", error.response || error);
-      const errorMsg = error.response?.data?.msg || "Login failed! Please check your credentials.";
+      const errorMsg =
+        error.response?.data?.msg || "Login failed! Please check your credentials.";
       setMessage(errorMsg);
     }
   };
@@ -84,7 +85,7 @@ const Login = () => {
               className="mt-1 block w-full p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
             />
           </div>
-          
+
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition"

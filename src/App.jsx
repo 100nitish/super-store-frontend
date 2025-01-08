@@ -8,17 +8,20 @@ import ProductForm from './components/Admin/ProductForm';
 import Register from './components/Registrtion/Register'
 import Edit from './components/Admin/Edit'
 import SingleProduct from './components/Admin/SingleProduct';
-
+import { AuthProvider } from './components/Context/AuthContext';
 const App = () => {
   const [open, setOpen] = useState(false);
   return (
+    <AuthProvider>
     <div>
       <BrowserRouter>
         <Routes>
         <Route path="/" element={<MainDashboard/>} />
           <Route path="/registration" element={<UserRegistraion />} />
           <Route path="/register" element={<Register/>} />
+          
           <Route path="/login" element={<Login />} />
+        
           <Route path="/products" element={<Products/>} />
           <Route path="/products/:id" element={<SingleProduct/>} />
           <Route
@@ -28,7 +31,9 @@ const App = () => {
           <Route path="/add-data" element={<ProductForm/>} />
         </Routes>
       </BrowserRouter>
+      
     </div>
+    </AuthProvider>
   );
 };
 
