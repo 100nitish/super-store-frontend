@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "@mui/material/Modal";
 import Products from "./Products";
 import { addProduct } from "../API/PostApi";
+import { ProductContext } from "../Context/ProductContext";
 
 const BasicModal = ({ handleOpen, handleClose, open, item, isEditMode }) => {
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-    image: null,
-  });
+
   const [message, setMessage] = useState("");
+  const {formData,setFormData}=useContext(ProductContext)
 
   useEffect(() => {
  
@@ -36,7 +32,7 @@ const BasicModal = ({ handleOpen, handleClose, open, item, isEditMode }) => {
   };
 
   const handleSubmit = async () => {
-    // e.preventDefault();
+
     
     setMessage("");
 

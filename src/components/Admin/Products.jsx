@@ -4,10 +4,12 @@ import AdminHeader from "./AdminHeader";
 import Button from "@mui/material/Button";
 import Edit from "./Edit";
 import { Link } from "react-router-dom";
-import { fetchProducts, removeProduct } from "../utils/productControl";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProducts } from "../Redux/features/todo/productSlice";
 
 const Products = () => {
-  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const { data, isLoading, error } = useSelector((state) => state.product);
   const [open, setOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -25,11 +27,11 @@ const Products = () => {
   };
 
   useEffect(() => {
-    fetchProducts(setData);
-  }, []);
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
   const handleDeleteProduct = (id) => {
-    removeProduct(id, setData, fetchProducts);
+    console.log(`Delete product with id: ${id}`);
   };
 
   return (
@@ -39,11 +41,11 @@ const Products = () => {
         <div className="flex-1 flex flex-col">
           <AdminHeader />
           <div className="p-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {data.length === 0 ? (
-                <p>Loading products...</p>
-              ) : (
-                data.map((item) => (
+            {isLoading && <p>Loading products...</p>}
+            {error && <p className="text-red-500">Error: {error}</p>}
+            {!isLoading && !error && data && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {data.map((item) => (
                   <div
                     key={item._id}
                     className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-center hover:shadow-2xl transition-shadow"
@@ -80,9 +82,9 @@ const Products = () => {
                       </button>
                     </div>
                   </div>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

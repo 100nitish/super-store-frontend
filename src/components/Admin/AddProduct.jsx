@@ -1,15 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { addNewProduct } from "../utils/addProductControl";
+import { ProductContext } from "../Context/ProductContext";
 
 const AddProductForm = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    price: "",
-    category: "",
-    image: null,
-  });
-  const [message, setMessage] = useState("");
+const {formData,setFormData}=useContext(ProductContext)
+const [message, setMessage] = useState("");
 
 
   const handleChange = (e) => {
@@ -20,7 +15,6 @@ const AddProductForm = () => {
     }));
   };
 
-
   const resetForm = () => {
     setFormData({
       name: "",
@@ -30,7 +24,6 @@ const AddProductForm = () => {
       image: null,
     });
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
